@@ -9,6 +9,7 @@ server/node_modules/
 .env
 client/.env
 server/.env
+admin/.env
 
 # Logs
 

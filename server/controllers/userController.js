@@ -4,9 +4,7 @@ import validator from "validator";
 import userModel from "../models/user.js";
 import doctorModel from "../models/doctor.js";
 import appointmentModel from "../models/appointment.js";
-import { v2 as cloudinary } from 'cloudinary'
-// import stripe from "stripe";
-// import razorpay from 'razorpay';
+import { v2 as cloudinary } from "cloudinary";
 
 // API to register user
 const registerUser = async (req, res) => {
