@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
-import userModel from "../models/userModel.js";
-import doctorModel from "../models/doctorModel.js";
-import appointmentModel from "../models/appointmentModel.js";
+import userModel from "../models/user.js";
+import doctorModel from "../models/doctor.js";
+import appointmentModel from "../models/appointment.js";
 import { v2 as cloudinary } from 'cloudinary'
-import stripe from "stripe";
-import razorpay from 'razorpay';
+// import stripe from "stripe";
+// import razorpay from 'razorpay';
 
 // API to register user
 const registerUser = async (req, res) => {
@@ -81,7 +81,7 @@ const loginUser = async (req, res) => {
 const getProfile = async (req, res) => {
 
     try {
-        const { userId } = req.body
+        const userId = req.userId
         const userData = await userModel.findById(userId).select('-password')
 
         res.json({ success: true, userData })
@@ -97,7 +97,8 @@ const updateProfile = async (req, res) => {
 
     try {
 
-        const { userId, name, phone, address, dob, gender } = req.body
+        const { name, phone, address, dob, gender } = req.body
+        const userId = req.userId
         const imageFile = req.file
 
         if (!name || !phone || !dob || !gender) {
@@ -128,7 +129,8 @@ const bookAppointment = async (req, res) => {
 
     try {
 
-        const { userId, docId, slotDate, slotTime } = req.body
+        const { docId, slotDate, slotTime } = req.body
+        const userId = req.userId;
         const docData = await doctorModel.findById(docId).select("-password")
 
         if (!docData.available) {
@@ -184,7 +186,8 @@ const bookAppointment = async (req, res) => {
 const cancelAppointment = async (req, res) => {
     try {
 
-        const { userId, appointmentId } = req.body
+        const { appointmentId } = req.body
+        const userId = req.userId;
         const appointmentData = await appointmentModel.findById(appointmentId)
 
         // verify appointment user 
@@ -217,7 +220,7 @@ const cancelAppointment = async (req, res) => {
 const listAppointment = async (req, res) => {
     try {
 
-        const { userId } = req.body
+        const userId = req.userId
         const appointments = await appointmentModel.find({ userId })
 
         res.json({ success: true, appointments })

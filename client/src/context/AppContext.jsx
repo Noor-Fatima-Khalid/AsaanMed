@@ -17,11 +17,12 @@ const AppContextProvider = (props) => {
     const getDoctosData = async () => {
 
         try {
-
             const { data } = await axios.get(backendUrl + '/api/doctor/list')
+            
             if (data.success) {
                 setDoctors(data.doctors)
             } else {
+
                 toast.error(data.message)
             }
 

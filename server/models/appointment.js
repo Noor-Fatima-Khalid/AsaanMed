@@ -15,4 +15,4 @@ const appointmentSchema = new mongoose.Schema({
 })
 
 const appointment = mongoose.models.appointment || mongoose.model("appointment", appointmentSchema)
-export default appointment
+export default appointment 
