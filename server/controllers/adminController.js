@@ -102,7 +102,7 @@ const addDoctor = async (req, res) => {
             date: Date.now()
         }
 
-        const newDoctor = new doctorModel(doctorData)
+        const newDoctor = new doctor(doctorData)
         await newDoctor.save()
         res.json({ success: true, message: 'Doctor Added' })
 

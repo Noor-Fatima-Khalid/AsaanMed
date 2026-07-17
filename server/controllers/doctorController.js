@@ -11,9 +11,9 @@ const loginDoctor = async (req, res) => {
         if (!doc)
             return res.json({ success: false, message: "Invalid credentials" })
 
-        const matched = await bcrypt.compare(password, user.password)
+        const matched = await bcrypt.compare(password, doc.password)
         if (matched) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+            const token = jwt.sign({ id: doc._id }, process.env.JWT_SECRET)
             res.json({ success: true, token })
         } else {
             res.json({ success: false, message: "Invalid credentials" })
@@ -26,8 +26,8 @@ const loginDoctor = async (req, res) => {
 
 const getDoctorApointments = async (req, res) => {
     try {
-        const {docId} = req.body
-        const appts = await appointment.findOne({docId})
+        const docId = req.docId;
+        const appointments = await appointment.find({ docId })
         res.json({ success: true, appointments })
     } catch (error) {
         console.log(error)
@@ -40,7 +40,8 @@ const getDoctorApointments = async (req, res) => {
 const appointmentCancel = async (req, res) => {
     try {
 
-        const { docId, appointmentId } = req.body
+        const { appointmentId } = req.body
+        const docId = req.docId;
 
         const appointmentData = await appointment.findById(appointmentId)
         if (appointmentData && appointmentData.docId === docId) {
@@ -61,7 +62,8 @@ const appointmentCancel = async (req, res) => {
 const appointmentComplete = async (req, res) => {
     try {
 
-        const { docId, appointmentId } = req.body
+        const { appointmentId } = req.body
+        const docId = req.docId;
 
         const appointmentData = await appointment.findById(appointmentId)
         if (appointmentData && appointmentData.docId === docId) {
@@ -81,7 +83,6 @@ const appointmentComplete = async (req, res) => {
 // API to get all doctors list for Frontend
 const doctorList = async (req, res) => {
     try {
-
         const doctors = await doctor.find({}).select(['-password', '-email'])
         res.json({ success: true, doctors })
 
@@ -96,7 +97,7 @@ const doctorList = async (req, res) => {
 const changeAvailablity = async (req, res) => {
     try {
 
-        const { docId } = req.body
+        const docId = req.docId
 
         const docData = await doctor.findById(docId)
         await doctor.findByIdAndUpdate(docId, { available: !docData.available })
@@ -112,7 +113,7 @@ const changeAvailablity = async (req, res) => {
 const doctorProfile = async (req, res) => {
     try {
 
-        const { docId } = req.body
+        const docId = req.docId
         const profileData = await doctor.findById(docId).select('-password')
 
         res.json({ success: true, profileData })
@@ -127,7 +128,8 @@ const doctorProfile = async (req, res) => {
 const updateDoctorProfile = async (req, res) => {
     try {
 
-        const { docId, fees, address, available } = req.body
+        const { fees, address, available } = req.body
+        const docId = req.docId;
 
         await doctor.findByIdAndUpdate(docId, { fees, address, available })
 
@@ -143,7 +145,7 @@ const updateDoctorProfile = async (req, res) => {
 const doctorDashboard = async (req, res) => {
     try {
 
-        const { docId } = req.body
+        const docId = req.docId
 
         const appointments = await appointment.find({ docId })
 
