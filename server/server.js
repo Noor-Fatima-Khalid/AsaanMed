@@ -17,7 +17,13 @@ connectCloudinary()
 
 // middleware
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: [
+        "https://asaanmed-client.vercel.app",
+        "https://asaanmed-admin.vercel.app"
+    ],
+    credentials: true
+}));
 
 // api endpts
 
